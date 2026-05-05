@@ -1,3 +1,21 @@
-node_modules/
+# Entornos virtuales
+venv/
+env/
 .env
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Bases de datos locales
+*.sqlite3
+
+# IDEs y SO
+.vscode/
+.idea/
+.DS_Store
+
+# Archivos de Node.js (por si acaso quedaron del proyecto anterior)
+node_modules/
 package-lock.json
