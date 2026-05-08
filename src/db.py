@@ -1,60 +1,100 @@
 import os
-from datetime import datetime
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 
-# Cargar variables del archivo .env
 load_dotenv()
 
-class MongoDBConnection:
-    _instance = None
+# ── Conexión ────────────────────────────────────────────────────
+_client = None
+_db = None
 
-    def __new__(cls):
-        # Patrón Singleton: Si no existe la instancia, la crea. Si ya existe, devuelve la misma.
-        if cls._instance is None:
-            cls._instance = super(MongoDBConnection, cls).__new__(cls)
-            uri = os.getenv("MONGODB_URI")
-            
-            try:
-                # Inicializar el cliente de MongoDB
-                cls._instance.client = MongoClient(uri, serverSelectionTimeoutMS=5000)
-                # Seleccionar la base de datos (se creará automáticamente si no existe)
-                cls._instance.db = cls._instance.client['chatbot_ai_db']
-                
-                # Verificar conexión haciendo un ping
-                cls._instance.client.admin.command('ping')
-                print("✅ Conexión a MongoDB Atlas exitosa (Singleton inicializado).")
-            except Exception as e:
-                print(f"❌ Error al conectar a MongoDB: {e}")
-                cls._instance.client = None
-                cls._instance.db = None
-                
-        return cls._instance
-
-    def get_db(self):
-        return self.db
-
-def guardar_sesion(fase, usuario_raw, usuario_norm, respuesta, reconocido, metodo):
+def get_db():
     """
-    Guarda la interacción en la colección 'sesiones'.
+    Patrón Singleton: reutiliza la conexión si ya existe.
+    Conectar a MongoDB es costoso; no lo hagas en cada operación.
     """
-    db_conn = MongoDBConnection()
-    db = db_conn.get_db()
+    global _client, _db
+    if _client is None:
+        uri = os.getenv("MONGODB_URI")
+        if not uri:
+            raise ValueError("MONGODB_URI no está definida en .env")
+        _client = MongoClient(uri, serverSelectionTimeoutMS=5000)
+        _db = _client["chatbot_db"]
+        
+        # Crear índice por timestamp para consultas eficientes
+        _db["sesiones"].create_index([("timestamp", ASCENDING)])
+        _db["sesiones"].create_index([("reconocido", ASCENDING)])
+        print("[DB] Conexión a MongoDB establecida.")
+    return _db
+
+def guardar_sesion(fase, usuario_raw, usuario_norm, respuesta, reconocido, similitud=None, metodo="desconocido"):
+    """
+    Guarda un turno de conversación en la colección 'sesiones'.
+    """
+    db = get_db()
+    doc = {
+        "fase": fase,
+        "timestamp": datetime.now(timezone.utc),
+        "usuario_raw": usuario_raw,
+        "usuario": usuario_norm,
+        "respuesta": respuesta,
+        "reconocido": reconocido,
+        "similitud": similitud,
+        "metodo": metodo
+    }
+    try:
+        resultado = db["sesiones"].insert_one(doc)
+        return str(resultado.inserted_id)
+    except Exception as e:
+        print(f"Error al guardar la sesión en MongoDB: {e}")
+        return None
+
+def obtener_no_reconocidos(fase="s1", limite=200):
+    """
+    Recupera mensajes que el bot NO pudo responder.
+    Estos son el insumo clave para la Fase 2: muestran qué preguntan los usuarios reales.
+    Returns: lista de strings (mensajes normalizados)
+    """
+    db = get_db()
+    cursor = db["sesiones"].find(
+        {"fase": fase, "reconocido": False},
+        {"usuario": 1, "usuario_raw": 1, "_id": 0}
+    ).sort("timestamp", ASCENDING).limit(limite)
+    return list(cursor)
+
+def obtener_todas_sesiones(fase=None, limite=500):
+    """
+    Recupera sesiones para análisis o entrenamiento del modelo NLP.
+    Si fase=None, devuelve todas las fases.
+    """
+    db = get_db()
+    filtro = {} if fase is None else {"fase": fase}
+    cursor = db["sesiones"].find(filtro).sort(
+        "timestamp", ASCENDING
+    ).limit(limite)
+    return list(cursor)
+
+def estadisticas():
+    """
+    Resumen estadístico de las conversaciones almacenadas.
+    Útil para el README y la entrega final.
+    """
+    db = get_db()
+    col = db["sesiones"]
+    total = col.count_documents({})
+    reconocidos = col.count_documents({"reconocido": True})
     
-    if db is not None:
-        try:
-            coleccion = db['sesiones']
-            documento = {
-                "fase": fase,
-                "timestamp": datetime.utcnow(),
-                "usuario_raw": usuario_raw,
-                "usuario_norm": usuario_norm,
-                "respuesta": respuesta,
-                "reconocido": reconocido,
-                "metodo": metodo
-            }
-            coleccion.insert_one(documento)
-        except Exception as e:
-            print(f"Error al guardar la sesión en MongoDB: {e}")
-    else:
-        print("Advertencia: No se guardó la sesión (sin conexión a BD).")
+    pipeline = [
+        {"$group": {"_id": "$fase", "count": {"$sum": 1}}}
+    ]
+    por_fase = {doc["_id"]: doc["count"] for doc in col.aggregate(pipeline)}
+    
+    return {
+        "total": total,
+        "reconocidos": reconocidos,
+        "no_reconocidos": total - reconocidos,
+        "tasa_exito": round(reconocidos/total*100, 1) if total else 0,
+        "por_fase": por_fase
+    }
+
