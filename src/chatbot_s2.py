@@ -27,16 +27,22 @@ STOP_ES.update(["hola", "ok", "oye"])
 # ── Corpus base ─────────────────────────────────────────────────
 # Este es el corpus inicial. Se AMPLIA con datos de MongoDB.
 CORPUS_BASE = {
-    "hola buenas tardes": "¡Quiúbole! Bienvenido a Tortas Ahogadas El Chato.",
-    "que horarios tienen abiertos": "Abrimos todos los días de 9:00 AM a 5:00 PM. ¡Puro horario de comida tapatía!",
-    "a que hora cierran el local": "Cerramos a las 5:00 PM todos los días.",
-    "donde estan ubicados su direccion": "Estamos en el centro de Guadalajara, a dos cuadras del Expiatorio.",
-    "que venden o cual es el menu": "Tenemos tortas ahogadas (media o bien ahogada), tacos dorados y tejuino fresquecito.",
-    "cuanto cuesta la torta precio": "La torta ahogada tradicional cuesta $65 pesitos.",
-    "pican mucho las tortas": "Manejamos puro chile de Yahualica. Si no eres de por acá, te sugiero la media ahogada.",
-    "tienen envios a domicilio": "¡Claro! Búscanos en las apps o llama al 33-1234-5678 para pasar a recoger.",
-    "aceptan tarjeta de credito o debito": "Aceptamos efectivo, tarjetas y transferencias.",
-    "muchas gracias adios": "¡Gracias a ti! Aquí te esperamos para que te eches una buena torta."
+    "hola buenas tardes buenos dias que tal": "¡Quiúbole! Bienvenido a Tortas Ahogadas El Chato, las más buenas de todo Jalisco.",
+    "que horarios tienen abiertos a que hora abren cierran": "Abrimos de lunes a domingo, desde las 9:00 AM hasta las 5:00 PM. ¡Puro horario de comida tapatía!",
+    "donde estan ubicados su direccion donde es": "Estamos ubicados en el centro histórico de Guadalajara, exactamente a dos cuadras del Templo Expiatorio. ¡No hay pierde!",
+    "que venden cual es el menu que tienen de comer": "Nuestro menú principal son las tradicionales tortas ahogadas (media ahogada, bien ahogada o sin chile). También tenemos tacos dorados de papa, frijol y requesón, y para tomar tenemos un tejuino fresquecito o agua de jamaica.",
+    "cuanto cuesta la torta precio de las cosas": "La torta ahogada tradicional cuesta $65 pesos. Los tacos dorados cuestan $15 pesos cada uno, y el vaso de tejuino grande está en $35 pesos.",
+    "pican mucho las tortas que chile usan": "Manejamos puro chile de árbol de Yahualica. Es bastante picoso. Si no eres de por acá o no comes chile, te sugiero pedirla 'sin chile' o 'media ahogada' para que no te enchiles feo.",
+    "tienen envios a domicilio me la traen a casa": "¡Claro que sí! Puedes buscarnos en aplicaciones de comida como Uber Eats, Rappi o Didi Food. O si prefieres, llama directo al 33-1234-5678 para pasar a recoger tu pedido al local.",
+    "aceptan tarjeta de credito o debito bitcoin pagos": "Aceptamos pagos en efectivo, tarjetas de crédito/débito (Visa, Mastercard, Amex) y también transferencias SPEI. Por el momento no aceptamos criptomonedas, vales de despensa ni trueques.",
+    "hacen eventos especiales o fiestas facturan": "Sí facturamos, solo pídelo en caja. También podemos llevar nuestras tortas a tus eventos privados o fiestas, tenemos paquetes desde 50 tortas. Llama al número del local para cotizar.",
+    "venden comida vegetariana o vegana pizzas hamburguesas": "No vendemos pizzas, hamburguesas ni sushi. Somos una tortería tradicional. Si eres vegetariano, te podemos ofrecer tacos dorados de papa o frijol con pura salsa de jitomate y col, ¡están riquísimos!",
+    "quien es el dueno quien es el chato historia": "El negocio fue fundado en 1998 por Don 'Chato' Rodríguez, un tapatío de corazón que empezó con un carrito en la calle y ahora tiene este gran local gracias a su receta secreta de salsa de Yahualica.",
+    "tienen sucursales en otras ciudades paises df monterrey": "No, por ahora somos un negocio local y 100% tapatío. Solo tenemos nuestra única sucursal en el centro de Guadalajara. No enviamos tortas por paquetería porque se aguadan.",
+    "se puede reservar mesa apartar lugar": "No tomamos reservaciones. El servicio es conforme van llegando los clientes, pero no te preocupes, el servicio es muy rápido y siempre hay lugar o se desocupa una mesa pronto.",
+    "dan servilletas cucharas me manche": "¡Claro! La torta ahogada se come con la mano, pero te damos cuchara para la salsita que sobra y todas las servilletas que necesites gratis. ¡Es parte de la experiencia mancharse!",
+    "se puede llevar mascotas son pet friendly": "Sí somos un local pet-friendly. Tienes que traer a tu mascota con correa y pueden estar en las mesas de la terraza exterior sin ningún problema.",
+    "muchas gracias adios nos vemos": "¡Gracias a ti por tu preferencia! Aquí te esperamos pronto para que te eches otra buena torta ahogada. ¡Que te vaya excelente!"
 }
 
 def pipeline_nlp(texto):
