@@ -142,3 +142,38 @@ Una vez en ejecución:
 - `stats`: Ver estadísticas globales de reconocimiento.
 - `salir`: Terminar sesión y mostrar resumen.
 - Cualquier otro texto: Se procesa según el bot (reglas o NLP).
+
+---
+
+## Reto Final: Sentimiento Adaptativo + Base Vectorial (ChromaDB)
+
+Se agrega un modo de atencion avanzado en `src/reto_sentimiento.py` con dos mejoras:
+
+1. **Analisis de sentimiento**:
+  - Detecta tono emocional (enojado, frustrado, neutral, satisfecho, muy positivo).
+  - Ajusta dinamicamente la instruccion del sistema para el LLM.
+
+2. **Busqueda semantica real con ChromaDB**:
+  - Indexa conversaciones reconocidas de MongoDB (`s1`, `s2`, `s3`).
+  - Recupera ejemplos semanticos relevantes por similitud para enriquecer contexto.
+
+### Ejecutar reto
+
+```bash
+python src/reto_sentimiento.py
+```
+
+### Pruebas del reto
+
+```bash
+python tests/test_reto_sentimiento.py
+```
+
+### Variables opcionales
+
+```env
+CHROMA_EMBED_MODEL=all-MiniLM-L6-v2
+```
+
+Si `SentenceTransformerEmbeddingFunction` no esta disponible en el entorno,
+el sistema aplica un embedding local con hashing para mantener la busqueda vectorial activa.

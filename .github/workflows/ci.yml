@@ -36,5 +36,8 @@ jobs:
       - name: Ejecutar pruebas Semana 3
         run: python tests/test_s3.py
 
+      - name: Ejecutar pruebas Reto Sentimiento + ChromaDB
+        run: python tests/test_reto_sentimiento.py
+
       - name: Resumen
         run: echo "✅ Todas las pruebas pasaron correctamente"
