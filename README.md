@@ -78,3 +78,39 @@ En esta segunda fase, el proyecto evolucionó de un sistema basado en reglas rí
    ```bash
    python tests/test_s2.py
    ```
+
+---
+
+## Semana 3: LLM con RAG y Memoria Persistente
+
+En la fase final (Semana 3), el chatbot da un salto hacia la inteligencia generativa integrando un Large Language Model (LLM) que utiliza los datos históricos de MongoDB mediante la técnica RAG (Retrieval-Augmented Generation).
+
+### 1. RAG: Retrieval-Augmented Generation (`src/chatbot_s3.py`)
+*   **Contexto Dinámico:** El LLM no utiliza conocimiento inventado o pre-entrenado para el negocio, sino que recupera de MongoDB los pares pregunta-respuesta más exitosos y seguros (con alta similitud) registrados en las Semanas 1 y 2.
+*   **Inyección de Prompt:** Este conocimiento recuperado se inyecta en el *system prompt* del LLM, logrando que el bot responda con precisión a los datos del negocio sin riesgo de alucinaciones (inventar precios o fechas).
+
+### 2. Memoria Conversacional Persistente
+*   **Session ID:** A diferencia de las fases anteriores donde cada turno era aislado, ahora el chatbot genera un `session_id` único para el usuario.
+*   **Recuperación de Historial:** Al enviar un mensaje, el sistema recupera los últimos `N` mensajes de la base de datos (MongoDB colección `sesiones_s3`) para enviarlos al LLM.
+*   **Continuidad:** Si el usuario cierra la aplicación, puede retomarla usando su `session_id`, logrando que el LLM "recuerde" de qué estaban hablando ayer o hace unas horas.
+
+### 3. Integración de API (OpenAI / Ollama)
+*   El sistema es flexible y permite conectarse tanto a modelos locales gratuitos (`Ollama` ejecutando Llama 3) para privacidad total, como a servicios en la nube (`OpenAI API`) configurables desde el archivo `.env`.
+
+### 4. Automatización con GitHub Actions (CI/CD)
+*   **Integración Continua:** Se creó un *workflow* en `.github/workflows/ci.yml`.
+*   Cada vez que se hace un `push` o `Pull Request` a GitHub, se levanta un servidor virtual de Ubuntu que instala las dependencias y ejecuta automáticamente toda la batería de pruebas (`test_s1.py`, `test_s2.py`, `test_s3.py`) protegiendo el proyecto de errores en producción.
+
+---
+
+### ¿Cómo probar la Semana 3?
+1. Instala todas las dependencias completas del proyecto:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. (Opcional) Si usarás OpenAI, asegúrate de poner tu `OPENAI_API_KEY` en el archivo `.env`. Si usas Ollama, asegúrate de que el software de Ollama esté corriendo en tu computadora.
+3. Ejecuta el Chatbot Generativo:
+   ```bash
+   python src/chatbot_s3.py
+   ```
+4. Escribe un mensaje, cierra el bot, y luego ábrelo de nuevo escribiendo `retomar:TU_SESSION_ID` para comprobar que la memoria es persistente.
