@@ -125,3 +125,27 @@ En la fase final (Semana 3), el chatbot da un salto hacia la inteligencia genera
    python src/chatbot_s3.py
    ```
 4. Escribe un mensaje, cierra el bot, y luego ábrelo de nuevo escribiendo `retomar:TU_SESSION_ID` para comprobar que la memoria es persistente.
+
+---
+
+## 🚀 Reto Extra (Completado): Sentimiento y ChromaDB
+
+Como desafío final para obtener la puntuación extra, el proyecto integra dos tecnologías avanzadas en una rama separada (`feature/reto-sentimiento`).
+
+### 1. Búsqueda Vectorial Semántica con ChromaDB
+Se reemplazó la búsqueda básica por una **base de datos vectorial (ChromaDB)**. El corpus de conocimiento se convierte en *Embeddings*, permitiendo que el sistema recupere el contexto entendiendo el verdadero significado de la pregunta en lugar de solo comparar letras.
+
+### 2. Análisis de Sentimiento con TextBlob
+Se integró un modelo de análisis de sentimiento que evalúa matemáticamente el estado emocional del usuario en tiempo real (enojado, frustrado, neutral, satisfecho, muy positivo). 
+Se implementó además un detector robusto para sortear las limitaciones nativas de TextBlob en español.
+El resultado **modifica dinámicamente el System Prompt** del LLM, logrando que Llama 3.2 altere su personalidad:
+*   Si el usuario está enojado, el bot responde con suma empatía y disculpas.
+*   Si el usuario está feliz, el bot responde con gran entusiasmo y signos de exclamación.
+
+### ¿Cómo probar el Reto Extra?
+1. Asegúrate de estar en la rama correcta (`git checkout feature/reto-sentimiento`).
+2. Ejecuta el script del reto:
+   ```bash
+   python src/reto_sentimiento.py
+   ```
+3. Prueba enviando un mensaje furioso ("¡Qué asco de servicio!") y observa cómo reacciona con empatía. Luego envía un mensaje alegre ("¡Me encantó todo!") y nota el cambio a una personalidad muy animada.
