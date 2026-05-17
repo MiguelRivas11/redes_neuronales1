@@ -38,3 +38,43 @@ En esta primera fase del proyecto, se estableció la arquitectura fundamental de
    ```bash
    python tests/test_s1.py
    ```
+
+---
+
+## Semana 2: Entrenamiento NLP con Datos Reales
+
+En esta segunda fase, el proyecto evolucionó de un sistema basado en reglas rígidas a un modelo adaptativo de Procesamiento de Lenguaje Natural (NLP). El objetivo principal fue hacer que el bot "aprendiera" de las interacciones reales que ocurrieron durante la Semana 1.
+
+### 1. Análisis de Datos (`analizar_s1.py`)
+*   Se creó un script para extraer y analizar las sesiones almacenadas en MongoDB.
+*   Esto permitió calcular la **tasa de éxito** inicial y, más importante aún, identificar las preguntas más frecuentes que el bot de reglas estáticas no pudo responder, sirviendo como insumo para mejorar el modelo.
+
+### 2. Pipeline NLP y Enriquecimiento de Corpus (`src/chatbot_s2.py`)
+*   **Pipeline NLP:** Se implementó usando la librería `nltk`. El texto entrante pasa por tokenización, eliminación de *stopwords* en español, y *stemming* (SnowballStemmer) para reducir las palabras a su raíz.
+*   **Corpus Dinámico:** A diferencia de la Fase 1, el corpus no es estático. El bot se conecta a MongoDB al arrancar, recupera todas las sesiones donde `reconocido: True` de la Fase 1, y **las integra dinámicamente a su conocimiento**.
+*   **Similitud Coseno:** En lugar de buscar coincidencias exactas, el sistema utiliza `TfidfVectorizer` de `scikit-learn` para convertir el texto en matrices matemáticas y calcular la similitud del coseno entre la pregunta del usuario y el corpus, con un umbral de tolerancia (0.2).
+
+### 3. Persistencia de Datos Mejorada
+*   Se mantuvo la integración con `db.py`.
+*   Ahora, cada interacción no solo guarda la pregunta y respuesta, sino que registra `fase: s2`, el método de inferencia utilizado y el puntaje matemático exacto de `similitud`.
+
+### 4. Pruebas Unitarias NLP (`tests/test_s2.py`)
+*   Se crearon pruebas para verificar que el pipeline procese correctamente el lenguaje (removiendo *stopwords* y aplicando *stemming* de forma correcta).
+*   Se implementaron **Mocks** (simuladores) de la base de datos para aislar el entorno de pruebas, garantizando que el modelo pueda inicializarse y responder a pruebas sin alterar la base de datos de producción.
+
+---
+
+### ¿Cómo probar la Semana 2?
+1. Asegúrate de instalar las nuevas dependencias de Machine Learning (`pip install nltk scikit-learn numpy`).
+2. Para ver el reporte de la Semana 1, ejecuta:
+   ```bash
+   python analizar_s1.py
+   ```
+3. Para iniciar el bot inteligente con TF-IDF, ejecuta:
+   ```bash
+   python src/chatbot_s2.py
+   ```
+4. Para correr las pruebas unitarias usando *mocks*, ejecuta:
+   ```bash
+   python tests/test_s2.py
+   ```
