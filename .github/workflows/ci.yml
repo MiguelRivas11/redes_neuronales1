@@ -33,5 +33,8 @@ jobs:
       - name: Ejecutar pruebas Semana 2
         run: python tests/test_s2.py
 
+      - name: Ejecutar pruebas Semana 3
+        run: python tests/test_s3.py
+
       - name: Resumen
         run: echo "✅ Todas las pruebas pasaron correctamente"
