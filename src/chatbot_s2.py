@@ -27,16 +27,16 @@ STOP_ES.update(["hola", "ok", "oye"])
 # ── Corpus base ─────────────────────────────────────────────────
 # Este es el corpus inicial. Se AMPLIA con datos de MongoDB.
 CORPUS_BASE = {
-    "cuanto cuesta el producto": "Nuestros productos van de $100 a $500 MXN segun el modelo.",
-    "cual es el precio de los articulos": "Nuestros productos van de $100 a $500 MXN segun el modelo.",
-    "en que horario estan abiertos": "Atendemos lunes a viernes de 9am a 6pm.",
-    "a que hora cierran": "Cerramos a las 6pm de lunes a viernes.",
-    "donde estan ubicados": "Estamos en Av. Universidad 123, Guadalajara, Jalisco.",
-    "tienen envios a domicilio": "Si, enviamos en 3-5 dias habiles a toda la republica.",
-    "como puedo contactarlos": "Llama al 33-1234-5678 o escribe a info@empresa.com",
-    "aceptan tarjeta de credito": "Aceptamos todas las tarjetas Visa y Mastercard.",
-    "tienen garantia los productos": "Todos nuestros productos tienen 1 ano de garantia.",
-    "aceptan devoluciones": "Aceptamos devoluciones en 30 dias con ticket de compra.",
+    "hola buenas tardes": "¡Quiúbole! Bienvenido a Tortas Ahogadas El Chato.",
+    "que horarios tienen abiertos": "Abrimos todos los días de 9:00 AM a 5:00 PM. ¡Puro horario de comida tapatía!",
+    "a que hora cierran el local": "Cerramos a las 5:00 PM todos los días.",
+    "donde estan ubicados su direccion": "Estamos en el centro de Guadalajara, a dos cuadras del Expiatorio.",
+    "que venden o cual es el menu": "Tenemos tortas ahogadas (media o bien ahogada), tacos dorados y tejuino fresquecito.",
+    "cuanto cuesta la torta precio": "La torta ahogada tradicional cuesta $65 pesitos.",
+    "pican mucho las tortas": "Manejamos puro chile de Yahualica. Si no eres de por acá, te sugiero la media ahogada.",
+    "tienen envios a domicilio": "¡Claro! Búscanos en las apps o llama al 33-1234-5678 para pasar a recoger.",
+    "aceptan tarjeta de credito o debito": "Aceptamos efectivo, tarjetas y transferencias.",
+    "muchas gracias adios": "¡Gracias a ti! Aquí te esperamos para que te eches una buena torta."
 }
 
 def pipeline_nlp(texto):
