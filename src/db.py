@@ -78,6 +78,29 @@ def obtener_no_reconocidos(fase="s1", limite=200):
     ).sort("timestamp", ASCENDING).limit(limite)
     return list(cursor)
 
+def obtener_todas_sesiones(fase=None, limite=1000):
+    """
+    Recupera sesiones de MongoDB para analitica/entrenamiento.
+    Si se indica fase, filtra por esa fase.
+    """
+    db = get_db()
+    filtro = {"fase": fase} if fase else {}
+    cursor = db["sesiones"].find(
+        filtro,
+        {
+            "fase": 1,
+            "usuario": 1,
+            "usuario_raw": 1,
+            "respuesta": 1,
+            "reconocido": 1,
+            "similitud": 1,
+            "metodo": 1,
+            "timestamp": 1,
+            "_id": 0,
+        },
+    ).sort("timestamp", ASCENDING).limit(limite)
+    return list(cursor)
+
 def estadisticas():
     """
     Genera un resumen estadistico para el comando 'stats'.
