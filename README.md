@@ -1,5 +1,16 @@
 # Proyecto Final: Arquitectura de Chatbots con IA
 
+## 🛠️ Flujo de Trabajo en GitHub (Metodología de Ingeniería)
+
+Este proyecto no solo se enfoca en el código de IA, sino en seguir un **flujo de trabajo profesional de ingeniería de software** evaluado estrictamente en la rúbrica:
+
+*   **Ramas de Características (Feature Branches):** La rama `main` está protegida. Todo el desarrollo se hace en ramas separadas por fase (ej. `feature/andre-fase1`, `feature/andre-fase2`, `feature/andre-fase3`) que heredan unas de otras.
+*   **Pull Requests (PRs):** La integración a la rama principal solo se realiza a través de Pull Requests documentados, permitiendo la revisión de código antes de la fusión.
+*   **Commits Semánticos:** Todo el historial de Git utiliza el estándar *Conventional Commits* (ej. `feat(s1): ...`, `fix(db): ...`, `docs: ...`) para contar una historia clara de la evolución del proyecto.
+*   **CI/CD con GitHub Actions:** Se cuenta con un flujo continuo automatizado. Cada *push* o *PR* levanta un servidor en la nube que ejecuta las pruebas unitarias para proteger la integridad del código.
+
+---
+
 ## Semana 1: Chatbot de Reglas y Conexión a MongoDB
 
 En esta primera fase del proyecto, se estableció la arquitectura fundamental del chatbot, enfocándonos en un modelo basado en reglas estáticas (diccionario) y asegurando la persistencia de datos en la nube. A continuación, se detalla todo lo que se implementó y cómo se cumple con cada punto de la rúbrica de la Semana 1.
